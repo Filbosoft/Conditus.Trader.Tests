@@ -1,0 +1,5 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+OrderFiltering,100,476,205,896,175.51,0.000%,56.91520,45.30,60.75,815.0
+PortfoliosLoad,100,120,50,320,63.71,0.000%,70.87172,34.12,74.75,493.0
+AssetSearch,100,5451,629,6507,709.16,0.000%,14.20858,13.24,15.07,954.0
+TOTAL,300,1160,50,29036,2298.65,0.333%,10.03344,7.37,10.64,751.9
