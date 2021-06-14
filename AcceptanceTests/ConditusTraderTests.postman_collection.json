@@ -1,0 +1,1157 @@
+{
+	"info": {
+		"_postman_id": "2d65c5fc-a8ff-4450-9340-aed2aafa5e73",
+		"name": "ConditusTraderTests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Assets",
+			"item": [
+				{
+					"name": "QueryAssetByName",
+					"item": [
+						{
+							"name": "WithExistingName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const nameQuery = \"app\";\r",
+											"\r",
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains asset data\", function() {\r",
+											"    const jsonBody = pm.response.json(),\r",
+											"        data = jsonBody.data;\r",
+											"    pm.expect(!!data && data.length > 0).to.be.true;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response assets has been filtered by nameQuery\", function() {\r",
+											"    const assets = pm.response.json().data,\r",
+											"        containsAssetsWhichDoesNotIncludeNameQuery = assets.some(a => !a.name.toLowerCase().includes(nameQuery));\r",
+											"\r",
+											"    pm.expect(containsAssetsWhichDoesNotIncludeNameQuery).to.be.false;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets?nameQuery=app",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets"
+									],
+									"query": [
+										{
+											"key": "nameQuery",
+											"value": "app"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WithNonexistingName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const nameQuery = \"app\";\r",
+											"\r",
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains empty data property\", function() {\r",
+											"    const jsonBody = pm.response.json(),\r",
+											"        data = jsonBody.data;\r",
+											"    pm.expect(!!data && data.length === 0).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets?nameQuery=ThisDoesn'tExistIAssureYou!",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets"
+									],
+									"query": [
+										{
+											"key": "nameQuery",
+											"value": "ThisDoesn'tExistIAssureYou!"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetAssetBySymbol",
+					"item": [
+						{
+							"name": "WithExistingSymbol",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const assetSymbol = \"AAPL\";\r",
+											"\r",
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains asset data\", function() {\r",
+											"    pm.expect(!!pm.response.json().data).to.be.true;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response asset is expected asset\", function() {\r",
+											"    const asset = pm.response.json().data;\r",
+											"    \r",
+											"    pm.expect(asset.symbol).to.eql(assetSymbol);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets/AAPL",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets",
+										"AAPL"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WithNonexistingSymbol",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is NotFound\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets/NonExisistingSymbol",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets",
+										"NonExisistingSymbol"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetAssetsBySymbols",
+					"item": [
+						{
+							"name": "WithValidSymbols",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const assetSymbols = [\"AAPL\",\"TSLA\"];\r",
+											"\r",
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains asset data\", function() {\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody.data && jsonBody.data.length === 2).to.be.true;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response assets is expected assets\", function() {\r",
+											"    const assets = pm.response.json().data,\r",
+											"        containsOtherAssets = assets.some(a => !assetSymbols.includes(a.symbol));\r",
+											"    \r",
+											"    pm.expect(containsOtherAssets).to.be.false;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets?symbols=",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets"
+									],
+									"query": [
+										{
+											"key": "symbols",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WithOneInvalidSymbol",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const validAssetSymbol = \"AAPL\";\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains asset data\", function() {\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody.data && jsonBody.data.length === 1).to.be.true;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response assets is expected assets\", function() {\r",
+											"    const assets = pm.response.json().data,\r",
+											"        containsOtherAssets = assets.some(a => a.symbol !== validAssetSymbol);\r",
+											"    \r",
+											"    pm.expect(containsOtherAssets).to.be.false;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets?symbols=AAPL,nope",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets"
+									],
+									"query": [
+										{
+											"key": "symbols",
+											"value": "AAPL,nope"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetAssets",
+					"item": [
+						{
+							"name": "WithoutAuthentication",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is Unauthorized\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WithoutQueryParameters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains asset data\", function() {\r",
+											"    const jsonBody = pm.response.json(),\r",
+											"        data = jsonBody.data;\r",
+											"    pm.expect(!!data && data.length > 0).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/assets",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Currency",
+			"item": [
+				{
+					"name": "DKKToUSD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body isn't empty\", function() {\r",
+									"    pm.expect(!!pm.response.body)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ID_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/currency?fromCode=DKK&amount=100.1&toCode=USD",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency"
+							],
+							"query": [
+								{
+									"key": "fromCode",
+									"value": "DKK"
+								},
+								{
+									"key": "amount",
+									"value": "100.1"
+								},
+								{
+									"key": "toCode",
+									"value": "USD"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WithoutFromCode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is BadRequest\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ID_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/currency?amount=100.1&toCode=USD",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency"
+							],
+							"query": [
+								{
+									"key": "amount",
+									"value": "100.1"
+								},
+								{
+									"key": "toCode",
+									"value": "USD"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WithoutToCode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is BadRequest\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ID_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/currency?fromCode=DKK&amount=100.1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency"
+							],
+							"query": [
+								{
+									"key": "fromCode",
+									"value": "DKK"
+								},
+								{
+									"key": "amount",
+									"value": "100.1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WithoutAmount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is Ok\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body isn't empty\", function() {\r",
+									"    pm.expect(!!pm.response.body)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ID_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/currency?fromCode=DKK&toCode=USD",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency"
+							],
+							"query": [
+								{
+									"key": "fromCode",
+									"value": "DKK"
+								},
+								{
+									"key": "toCode",
+									"value": "USD"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WithoutAuthentication",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is Unauthorized\", function() {\r",
+									"  pm.expect(pm.response.code).to.equal(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/currency",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Exchanges",
+			"item": [
+				{
+					"name": "GetExchangeByMIC",
+					"item": [
+						{
+							"name": "WithExistingMIC",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const mic = \"XCSE\"\r",
+											"\r",
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains exchange data\", function() {\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody.data).to.be.true;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response exchange is expected exchange\", function() {\r",
+											"    const exchange = pm.response.json().data;\r",
+											"\r",
+											"    pm.expect(exchange.mic).to.eql(mic);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/exchanges/XCSE",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"exchanges",
+										"XCSE"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WithNonexistingMIC",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is NotFound\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/exchanges/nonExisitingMic",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"exchanges",
+										"nonExisitingMic"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GetExchanges",
+					"item": [
+						{
+							"name": "WithoutAuthentication",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is Unauthorized\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/exchanges",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"exchanges"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WithoutQueryParameters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const nameQuery = \"app\";\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains exchanges\", function() {\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/exchanges",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"exchanges"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "QueryExchangesByName",
+					"item": [
+						{
+							"name": "WithExistingName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const nameQuery = \"copenhagen\"\r",
+											"\r",
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains exchange data\", function() {\r",
+											"    const jsonBody = pm.response.json(),\r",
+											"        data = jsonBody.data;\r",
+											"\r",
+											"    pm.expect(!!data && data.length > 0).to.be.true;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response exchanges has been filtered by nameQuery\", function() {\r",
+											"    const exchanges = pm.response.json().data,\r",
+											"        containsExchangesWithNameNotIncludingNameQuery = exchanges.some(e => !e.name.toLowerCase().includes(nameQuery))\r",
+											"\r",
+											"    pm.expect(containsExchangesWithNameNotIncludingNameQuery).to.be.false;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/exchanges?nameQuery=copenhagen",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"exchanges"
+									],
+									"query": [
+										{
+											"key": "nameQuery",
+											"value": "copenhagen"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WithNonexistingMIC",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body contains empty data property\", function() {\r",
+											"    const jsonBody = pm.response.json(),\r",
+											"        data = jsonBody.data;\r",
+											"\r",
+											"    pm.expect(!!data && data.length === 0).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ID_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/exchanges?nonexistingExchangeName",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"exchanges"
+									],
+									"query": [
+										{
+											"key": "nonexistingExchangeName",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Security",
+			"item": [
+				{
+					"name": "WithValidToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is Ok\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ID_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/portfolios",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"portfolios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WithExpiredToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiJQMlVPUlJCSEJSUFRrVEcrSzQ2OWxSOHlBY1FDdlhWUDl5azYzQStNTU5NPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI1NWY1MzJkOC1jZjJjLTQzNDAtYmFiMC0yN2U3YjY5ZDZkZDgiLCJhdWQiOiI3b211YjVhczFlbTM5ZHNhZDZyNHY5Y29lOCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZXZlbnRfaWQiOiI3NjY3NTljMC0yZTA4LTQxMDAtYjIwMC0wMDk1YjRlMGMyNDgiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTYyMzY1Mzk1OCwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LW5vcnRoLTEuYW1hem9uYXdzLmNvbVwvZXUtbm9ydGgtMV93Z2g4UjFUYm4iLCJjb2duaXRvOnVzZXJuYW1lIjoidGVzdHVzZXIiLCJleHAiOjE2MjM2NTc1NTgsImlhdCI6MTYyMzY1Mzk1OCwiZW1haWwiOiJ0ZXN0QGVtYWlsLmNvbSJ9.UhUMCE06emC2Ifu_SKtMPoYRtWmv3Np3FXyqQGdwQBvwUOeH52pL-4dUDW0nd1ya9tjdK3-uLjwzpImP5svxjMR3xopJwJb4ax4HV7RBgikQS7IMQ6FLzQADdKC_HrWCOTrtLYT3O5lFP24unb9QyWqoLmTKY7T6FpcD1N-KsAiK5Yxnkj5K0njY6GTPSb49mAdTLRSyJCuE-61XfOlr7-4ghPky_SwxuFfJKUnPbUvtTQZGW4JSAVuqJbglzMeq-PxF4Mnl-UiIt4sehyp72G-NLgIK5BKCtmY6p5gjcnUD9hZTM1zdUwTv5nJ1SlU8F4qDP2A8kDZ2CeIfFO9vSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/portfolios",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"portfolios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WithInvalidToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiJQMlVPUlJCSEJSUFRrVEcrSzQ2OWxSOHlBY1FDdlhWUDl5azYzQStNTU5NPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ4eHh4eHh4eC14eHh4LXh4eHgteHh4eC14eHh4eHh4eHh4eHgiLCJhdWQiOiJ4eHh4eHh4eHh4eHh4eHh4eHh4IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJldmVudF9pZCI6Inh4eHh4eHh4LXh4eHgteHh4eC14eHh4LXh4eHh4eHh4eHh4eCIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjIzNjUzOTU4LCJpc3MiOiIiLCJjb2duaXRvOnVzZXJuYW1lIjoidGVzdCIsImV4cCI6OTk5OTk5OTk5OSwiaWF0IjoxNjIzNjUzOTU4LCJlbWFpbCI6InRlc3RAbWFpbC5jb20ifQ.UhUMCE06emC2Ifu_SKtMPoYRtWmv3Np3FXyqQGdwQBvwUOeH52pL-4dUDW0nd1ya9tjdK3-uLjwzpImP5svxjMR3xopJwJb4ax4HV7RBgikQS7IMQ6FLzQADdKC_HrWCOTrtLYT3O5lFP24unb9QyWqoLmTKY7T6FpcD1N-KsAiK5Yxnkj5K0njY6GTPSb49mAdTLRSyJCuE-61XfOlr7-4ghPky_SwxuFfJKUnPbUvtTQZGW4JSAVuqJbglzMeq-PxF4Mnl-UiIt4sehyp72G-NLgIK5BKCtmY6p5gjcnUD9hZTM1zdUwTv5nJ1SlU8F4qDP2A8kDZ2CeIfFO9vSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/portfolios",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"portfolios"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJraWQiOiJQMlVPUlJCSEJSUFRrVEcrSzQ2OWxSOHlBY1FDdlhWUDl5azYzQStNTU5NPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI1NWY1MzJkOC1jZjJjLTQzNDAtYmFiMC0yN2U3YjY5ZDZkZDgiLCJhdWQiOiI3b211YjVhczFlbTM5ZHNhZDZyNHY5Y29lOCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZXZlbnRfaWQiOiJjMWQyYWUzNS1iZTM0LTRjZDMtODBkYi02MGVkMmNkZjJlOGIiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTYyMzAwMjUyNiwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LW5vcnRoLTEuYW1hem9uYXdzLmNvbVwvZXUtbm9ydGgtMV93Z2g4UjFUYm4iLCJjb2duaXRvOnVzZXJuYW1lIjoidGVzdHVzZXIiLCJleHAiOjE2MjMwMDYxMjYsImlhdCI6MTYyMzAwMjUyNiwiZW1haWwiOiJ0ZXN0QGVtYWlsLmNvbSJ9.NEERXdTLeJPMIGXcKCmoxQ-3H3FB5ozKxSDTcTRq10VY-iFhDS8EuvzSNRQ4k9RubCkQV2fx743bsTJmUOe5AnZK4MpMrEAPnmFiRHUu3V-Im6YCI1kwDUyuYAML44CF5OrxQBwXE8sGEFBTjNfdx3uZ2E2OXHRWgQqytviDq_E0DEfTwyhKu44WG1qVuCzHDxof1q3uUfPrPfLKWNCY1wIDITi_R2lRbm3MGJ1xOG4Den7gE8YCoqruapt-s6NomZUQnu3OlbffxDGAreY7_AOlafCI1Zl_U5WzIOMsh7HG65bYNdGy2hPVUxN4XN7JUSBdWTaGIGpM4MOw_vxl9w",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
