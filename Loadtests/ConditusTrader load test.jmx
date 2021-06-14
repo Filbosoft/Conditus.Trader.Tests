@@ -15,7 +15,7 @@
           </elementProp>
           <elementProp name="USER_TOKEN" elementType="Argument">
             <stringProp name="Argument.name">USER_TOKEN</stringProp>
-            <stringProp name="Argument.value">eyJraWQiOiJQMlVPUlJCSEJSUFRrVEcrSzQ2OWxSOHlBY1FDdlhWUDl5azYzQStNTU5NPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI1NWY1MzJkOC1jZjJjLTQzNDAtYmFiMC0yN2U3YjY5ZDZkZDgiLCJhdWQiOiI3b211YjVhczFlbTM5ZHNhZDZyNHY5Y29lOCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZXZlbnRfaWQiOiI0NzRlNGMyZC1lMDg5LTQ2M2MtODA0Yi1kOTg1ZmU1NjU4MzMiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTYyMzQxMTYwNiwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LW5vcnRoLTEuYW1hem9uYXdzLmNvbVwvZXUtbm9ydGgtMV93Z2g4UjFUYm4iLCJjb2duaXRvOnVzZXJuYW1lIjoidGVzdHVzZXIiLCJleHAiOjE2MjM0MTUyMDYsImlhdCI6MTYyMzQxMTYwNiwiZW1haWwiOiJ0ZXN0QGVtYWlsLmNvbSJ9.hvgUrFo6GZy5-YCmyMcaSug_WnUfYxxkGTj9OEZiJyhAszlgpYL_9Y_MLr6cL_KYjJ2X2iTI-70lfa6NfkyEv6VueRzPDhXRpqxUQEHvgCaEdnvLdSo2KYymuGzHH7Tok92d1PKahcOBbM-kx3abIRshw3mwV2DpwWc8suMAWFaRMXPi68BNiP-6s8m3bWnnn88SatFxeI6a90paCGxjTrgj7BGVnBYPBENsztoPgUEMHK-o5EZNN3n1x0zN67IGjhmon-GyvhlI01Upn63mVHVZmioLXLU1g_tHCK4XbrSoZFN1rNksAaeJwehkIKBr5rc0pdTPcv2u8-I6VptE9A</stringProp>
+            <stringProp name="Argument.value">eyJraWQiOiJQMlVPUlJCSEJSUFRrVEcrSzQ2OWxSOHlBY1FDdlhWUDl5azYzQStNTU5NPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI1NWY1MzJkOC1jZjJjLTQzNDAtYmFiMC0yN2U3YjY5ZDZkZDgiLCJhdWQiOiI3b211YjVhczFlbTM5ZHNhZDZyNHY5Y29lOCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZXZlbnRfaWQiOiI5YTFhZWNjNC1lNDMwLTQxZmQtYTdiMy1mMzk0YTRhZmFhMzMiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTYyMzQxNzY3NywiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LW5vcnRoLTEuYW1hem9uYXdzLmNvbVwvZXUtbm9ydGgtMV93Z2g4UjFUYm4iLCJjb2duaXRvOnVzZXJuYW1lIjoidGVzdHVzZXIiLCJleHAiOjE2MjM0MjEyNzcsImlhdCI6MTYyMzQxNzY3NywiZW1haWwiOiJ0ZXN0QGVtYWlsLmNvbSJ9.MHeT9ltZRt0koow5uk-_pw2PsUT5TKxHgkPY_jh9cicOBefFJrObSUOu8ORPi1kc4IvFaPUQ41pLUGsTr4O5guUc6V8FidujTllveLPvOgI1Wli7Ki6IJWqL_8Awbb0kqmWx462JfWCMnZow3mnp-LxjpvSjUStAup1fwgSd_Ici_YTiupL22WbNNIAiIHVcMhcmLWGnhuO26vsG5jncruy2tmJ8f73y57E-sKaJSei8lxfx0D0_OUSXgA5YMQ8QAphDZbziDkKzevbpNi7XCWnk_V1SjrO3IorlxDLocntY1i0HNlE32NCpeSn7rVz3BUHiIEGkfsb2q34qOjmvmw</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="FRONTEND_URL" elementType="Argument">
@@ -23,12 +23,17 @@
             <stringProp name="Argument.value">trader.conditus.net</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="USER_PORTFOLIO_ID" elementType="Argument">
+            <stringProp name="Argument.name">USER_PORTFOLIO_ID</stringProp>
+            <stringProp name="Argument.value">5d19050a-8d64-4a52-89e2-0db7bd7143bc</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="BackendLoadTest" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="BackendLoadTest" enabled="false">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -117,7 +122,39 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AssetSearch" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="PortfolioGrowthPointsLoad" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${API_URL}</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/v1/portfolios/${USER_PORTFOLIO_ID}</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="TestPlan.comments">Gets growthpoint one month back for the given portfolio.
+This is a standard call we expect to have often, as it happens everytime a user opens their portfolio.</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${USER_TOKEN}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="AssetSearch" enabled="false">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="name" elementType="HTTPArgument">
@@ -230,13 +267,13 @@
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="FrontendLoadTest" enabled="false">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="FrontendLoadTest" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1000</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
