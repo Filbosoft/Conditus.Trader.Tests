@@ -1241,11 +1241,11 @@
 											"\r",
 											"pm.test(\"Body contains exchange data\", function() {\r",
 											"    const jsonBody = pm.response.json();\r",
-											"    pm.expect(!!jsonBody.data).to.be.true;\r",
+											"    pm.expect(!!jsonBody).to.be.true;\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Response exchange is expected exchange\", function() {\r",
-											"    const exchange = pm.response.json().data;\r",
+											"    const exchange = pm.response.json();\r",
 											"\r",
 											"    pm.expect(exchange.mic).to.eql(mic);\r",
 											"});"
@@ -1268,13 +1268,18 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/exchanges/XCSE",
+									"raw": "{{URL}}/exchanges?Mic=XCSE",
 									"host": [
 										"{{URL}}"
 									],
 									"path": [
-										"exchanges",
-										"XCSE"
+										"exchanges"
+									],
+									"query": [
+										{
+											"key": "Mic",
+											"value": "XCSE"
+										}
 									]
 								}
 							},
@@ -1374,7 +1379,7 @@
 											"\r",
 											"pm.test(\"Body contains exchanges\", function() {\r",
 											"    const jsonBody = pm.response.json();\r",
-											"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+											"    pm.expect(!!jsonBody && jsonBody.length > 0).to.be.true;\r",
 											"});"
 										],
 										"type": "text/javascript"
