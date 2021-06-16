@@ -25,13 +25,12 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Body contains asset data\", function() {\r",
-											"    const jsonBody = pm.response.json(),\r",
-											"        data = jsonBody.data;\r",
-											"    pm.expect(!!data && data.length > 0).to.be.true;\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody && jsonBody.length > 0).to.be.true;\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Response assets has been filtered by nameQuery\", function() {\r",
-											"    const assets = pm.response.json().data,\r",
+											"    const assets = pm.response.json(),\r",
 											"        containsAssetsWhichDoesNotIncludeNameQuery = assets.some(a => !a.name.toLowerCase().includes(nameQuery));\r",
 											"\r",
 											"    pm.expect(containsAssetsWhichDoesNotIncludeNameQuery).to.be.false;\r",
@@ -55,7 +54,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/assets?nameQuery=app",
+									"raw": "{{URL}}/assets?name=app",
 									"host": [
 										"{{URL}}"
 									],
@@ -64,7 +63,7 @@
 									],
 									"query": [
 										{
-											"key": "nameQuery",
+											"key": "name",
 											"value": "app"
 										}
 									]
@@ -79,16 +78,13 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"const nameQuery = \"app\";\r",
-											"\r",
 											"pm.test(\"Status code is Ok\", function() {\r",
 											"  pm.expect(pm.response.code).to.equal(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Body contains empty data property\", function() {\r",
-											"    const jsonBody = pm.response.json(),\r",
-											"        data = jsonBody.data;\r",
-											"    pm.expect(!!data && data.length === 0).to.be.true;\r",
+											"pm.test(\"Body should be empty\", function() {\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody && jsonBody.length === 0).to.be.true;\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -109,7 +105,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/assets?nameQuery=ThisDoesn'tExistIAssureYou!",
+									"raw": "{{URL}}/assets?name=ThisDoesn'tExistIAssureYou!",
 									"host": [
 										"{{URL}}"
 									],
@@ -118,7 +114,7 @@
 									],
 									"query": [
 										{
-											"key": "nameQuery",
+											"key": "name",
 											"value": "ThisDoesn'tExistIAssureYou!"
 										}
 									]
@@ -145,11 +141,11 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Body contains asset data\", function() {\r",
-											"    pm.expect(!!pm.response.json().data).to.be.true;\r",
+											"    pm.expect(!!pm.response.json()).to.be.true;\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Response asset is expected asset\", function() {\r",
-											"    const asset = pm.response.json().data;\r",
+											"    const asset = pm.response.json();\r",
 											"    \r",
 											"    pm.expect(asset.symbol).to.eql(assetSymbol);\r",
 											"});"
@@ -172,13 +168,18 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/assets/AAPL",
+									"raw": "{{URL}}/assets?symbols=AAPL",
 									"host": [
 										"{{URL}}"
 									],
 									"path": [
-										"assets",
-										"AAPL"
+										"assets"
+									],
+									"query": [
+										{
+											"key": "symbols",
+											"value": "AAPL"
+										}
 									]
 								}
 							},
@@ -191,9 +192,15 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Status code is NotFound\", function() {\r",
-											"  pm.expect(pm.response.code).to.equal(404);\r",
-											"});"
+											"pm.test(\"Status code is Ok\", function() {\r",
+											"  pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Body is empty\", function() {\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody && jsonBody.length === 0).to.be.true;\r",
+											"});\r",
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -213,13 +220,18 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/assets/NonExisistingSymbol",
+									"raw": "{{URL}}/assets?symbols=NonExisistingSymbol",
 									"host": [
 										"{{URL}}"
 									],
 									"path": [
-										"assets",
-										"NonExisistingSymbol"
+										"assets"
+									],
+									"query": [
+										{
+											"key": "symbols",
+											"value": "NonExisistingSymbol"
+										}
 									]
 								}
 							},
@@ -245,11 +257,11 @@
 											"\r",
 											"pm.test(\"Body contains asset data\", function() {\r",
 											"    const jsonBody = pm.response.json();\r",
-											"    pm.expect(!!jsonBody.data && jsonBody.data.length === 2).to.be.true;\r",
+											"    pm.expect(!!jsonBody && jsonBody.length === 2).to.be.true;\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Response assets is expected assets\", function() {\r",
-											"    const assets = pm.response.json().data,\r",
+											"    const assets = pm.response.json(),\r",
 											"        containsOtherAssets = assets.some(a => !assetSymbols.includes(a.symbol));\r",
 											"    \r",
 											"    pm.expect(containsOtherAssets).to.be.false;\r",
@@ -273,7 +285,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{URL}}/assets?symbols=",
+									"raw": "{{URL}}/assets?symbols=AAPL,TSLA",
 									"host": [
 										"{{URL}}"
 									],
@@ -283,7 +295,7 @@
 									"query": [
 										{
 											"key": "symbols",
-											"value": ""
+											"value": "AAPL,TSLA"
 										}
 									]
 								}
@@ -305,11 +317,11 @@
 											"\r",
 											"pm.test(\"Body contains asset data\", function() {\r",
 											"    const jsonBody = pm.response.json();\r",
-											"    pm.expect(!!jsonBody.data && jsonBody.data.length === 1).to.be.true;\r",
+											"    pm.expect(!!jsonBody && jsonBody.length === 1).to.be.true;\r",
 											"});\r",
 											"\r",
 											"pm.test(\"Response assets is expected assets\", function() {\r",
-											"    const assets = pm.response.json().data,\r",
+											"    const assets = pm.response.json(),\r",
 											"        containsOtherAssets = assets.some(a => a.symbol !== validAssetSymbol);\r",
 											"    \r",
 											"    pm.expect(containsOtherAssets).to.be.false;\r",
@@ -399,10 +411,9 @@
 											"  pm.expect(pm.response.code).to.equal(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Body contains asset data\", function() {\r",
-											"    const jsonBody = pm.response.json(),\r",
-											"        data = jsonBody.data;\r",
-											"    pm.expect(!!data && data.length > 0).to.be.true;\r",
+											"pm.test(\"Body contains 20 assets\", function() {\r",
+											"    const jsonBody = pm.response.json();\r",
+											"    pm.expect(!!jsonBody && jsonBody.length === 20).to.be.true;\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -433,6 +444,527 @@
 								}
 							},
 							"response": []
+						}
+					]
+				},
+				{
+					"name": "Price",
+					"item": [
+						{
+							"name": "GetPriceHistoryMultipleAssets",
+							"item": [
+								{
+									"name": "WithExistingAssets",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const assetSymbols = [\"TSLA\", \"APPL\"];\r",
+													"\r",
+													"pm.test(\"Status code is Ok\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Body contains assets price data\", function() {\r",
+													"    const jsonBody = pm.response.json();\r",
+													"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response asset prices only is for specified assets\", function() {\r",
+													"    const assets = pm.response.json().data,\r",
+													"        containsPricesOfOtherAssets = assets.some(a => !assetSymbols.includes(a.symbol));\r",
+													"\r",
+													"    pm.expect(containsPricesOfOtherAssets).to.be.false;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}/assets/price?Symbols=TSLA,APPL",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "Symbols",
+													"value": "TSLA,APPL"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WithOneNonExistingAsset",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const assetSymbol = \"TSLA\";\r",
+													"\r",
+													"pm.test(\"Status code is Ok\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Body contains assets price data\", function() {\r",
+													"    const jsonBody = pm.response.json();\r",
+													"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response asset prices only is for the valid specified asset\", function() {\r",
+													"    const assetPrices = pm.response.json().data,\r",
+													"        containsAssetPricessWhichDoesNotIncludeBelongToSpecifiedAsset = assetPrices.some(a => !a.symbol.includes(assetSymbol));\r",
+													"\r",
+													"    pm.expect(containsAssetPricessWhichDoesNotIncludeBelongToSpecifiedAsset).to.be.false;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}/assets/price?Symbols=TSLA,NonExistingSymbol",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "Symbols",
+													"value": "TSLA,NonExistingSymbol"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "GetPriceHistorySingleAsset",
+							"item": [
+								{
+									"name": "GetPriceHistoryOfExistingAsset",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const assetSymbol = \"TSLA\";\r",
+													"\r",
+													"pm.test(\"Status code is Ok\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Body contains asset price data\", function() {\r",
+													"    const jsonBody = pm.response.json();\r",
+													"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response asset prices only is for the specified asset\", function() {\r",
+													"    const assetPrices = pm.response.json().data,\r",
+													"        containsAssetPricessWhichDoesNotIncludeBelongToSpecifiedAsset = assetPrices.some(a => !a.symbol.includes(assetSymbol));\r",
+													"\r",
+													"    pm.expect(containsAssetPricessWhichDoesNotIncludeBelongToSpecifiedAsset).to.be.false;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}/assets/price?Symbols=TSLA",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "Symbols",
+													"value": "TSLA"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GetPriceHistoryOfNonExistingAsset",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is Ok\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Body contains empty data attribute\", function() {\r",
+													"    const jsonBody = pm.response.json();\r",
+													"    pm.expect(!!jsonBody.data && jsonBody.data.length == 0).to.be.true;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{URL}}/assets/price?Symbols=NonExsistingSymbol",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "Symbols",
+													"value": "NonExsistingSymbol"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "GetPriceHistoryWithInterval",
+							"item": [
+								{
+									"name": "With1MinInterval",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is Ok\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Body contains asset price data\", function() {\r",
+													"    const jsonBody = pm.response.json();\r",
+													"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Price data is with a 1 min interval of each other\", function() {\r",
+													"    const [price1,price2] = pm.response.json().data,\r",
+													"        priceInterval = new Date(price1.date) - new Date(price2.date),\r",
+													"        oneMinInMs = 60000;\r",
+													"\r",
+													"    pm.expect(priceInterval === oneMinInMs).to.be.true;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Interval\": \"_1min\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL}}/assets/price?Symbols=TSLA&Type=Intraday",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "Symbols",
+													"value": "TSLA"
+												},
+												{
+													"key": "Type",
+													"value": "Intraday"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "GetPriceHistoryFromAndToDate",
+							"item": [
+								{
+									"name": "WithFromDateBeforeToDate",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const fromDate = new Date(\"2021-05-01\"),\r",
+													"    toDate = new Date(\"2021-05-31\");\r",
+													"\r",
+													"pm.test(\"Status code is Ok\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Body contains asset price data\", function() {\r",
+													"    const jsonBody = pm.response.json();\r",
+													"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Price point dates is between the provided from and to date\", function() {\r",
+													"    const pricePoints = pm.response.json().data,\r",
+													"        containsPricePointOutsideProvidedInterval = pricePoints.some(p => new Date(p.date) > toDate || new Date(p.date) < fromDate);\r",
+													"\r",
+													"    pm.expect(containsPricePointOutsideProvidedInterval).to.be.false;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Date_From\": \"2021-05-01\",\r\n    \"Date_To\": \"2021-05-31\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL}}/assets/price?Symbols=TSLA",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "Symbols",
+													"value": "TSLA"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WithFromDateAfterToDate",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is BadRequest\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Date_From\": \"2021-05-31\",\r\n    \"Date_To\": \"2021-05-01\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL}}/assets/price?Symbols=TSLA",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "Symbols",
+													"value": "TSLA"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WithoutDatesSpecified",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is Ok\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Body contains asset price data\", function() {\r",
+													"    const jsonBody = pm.response.json();\r",
+													"    pm.expect(!!jsonBody.data && jsonBody.data.length > 0).to.be.true;\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ID_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{URL}}/assets/price?symbols=TSLA",
+											"host": [
+												"{{URL}}"
+											],
+											"path": [
+												"assets",
+												"price"
+											],
+											"query": [
+												{
+													"key": "symbols",
+													"value": "TSLA"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					]
 				}
